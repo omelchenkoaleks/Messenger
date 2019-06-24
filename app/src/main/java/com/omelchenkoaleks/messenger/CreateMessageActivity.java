@@ -20,8 +20,21 @@ public class CreateMessageActivity extends AppCompatActivity {
 
     public void onClickSendMessage(View view) {
         String message = mMessageEditText.getText().toString().trim();
-        Intent intent = new Intent(this, ReceivedMassageActivity.class);
-        intent.putExtra("msg", message);
-        startActivity(intent);
+
+        // указали Андроид, что нам нужна активность, которая умеет отправлять сообщения
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        // устанавливаем тип передаваемого сообщения
+        intent.setType("text/plain");
+        // передаем само сообщение
+        intent.putExtra(Intent.EXTRA_TEXT, message);
+
+        /*
+            если хотим, чтобы у пользователя была всегда возможность выбирать как отправить
+            сообщение (чтобы он не заблокировал эту возможность кнопкой "всегда") ...
+         */
+        Intent chosenIntent = Intent.createChooser(intent,
+                getString(R.string.chooser_title));
+
+        startActivity(chosenIntent);
     }
 }
